@@ -16,15 +16,13 @@ package entities.environment
 		
 		public function GoldCoin(x:Number=0, y:Number=0) 
 		{
-			sprite.add("flash", [0, 1, 2, 3, 4, 5, 6], 15, true);
+			sprite.add("flash", [0, 1, 2, 3, 3, 2, 1, 0], 15, true);
 			setHitbox(20, 20);
 			sprite.play("flash");
 		}
 		
-		override public function update():void
-		{
-			if (collide("player", x, y))
-			{
+		override public function update():void {
+			if (collide("player", x, y)) {
 				destroy();
 			}
 		}

@@ -126,6 +126,10 @@ package entities.npcs
 			return direction;
 		}
 		
+		/**
+		 * 
+		 * @return Speed
+		 */
 		public function getSpeed():Number {
 			return speed;
 		}

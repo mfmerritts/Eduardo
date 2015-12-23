@@ -13,15 +13,14 @@ package
 	public class Main extends Engine
 	{
 		
-		public function Main():void 
-		{
+		public function Main():void {
 			super(320, 240, 60, false);
+			FP.screen.color = 0x060606;
 			FP.screen.scale = 2;
-			FP.world = new ui.EddyWorld(Assets.TESTLEVEL, 50, 50);
+			FP.world = new ui.EddyWorld(Assets.CAVE, 50, 50);
 		}
 		
-		override public function init():void
-		{
+		override public function init():void {
 			
 		}
 		

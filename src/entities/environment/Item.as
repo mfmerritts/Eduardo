@@ -14,11 +14,17 @@ package entities.environment
 		
 		public var GRAVITY:Number = 0;
 		
-		public function Item(x:Number=0, y:Number=0) 
-		{
+		public function Item(x:Number=0, y:Number=0) {
 			super(x, y, graphic, mask);
 			type = "item";
 			GRAVITY = 0;
+		}
+		
+		/**
+		 * Override this: Called when the item is collected.
+		 */
+		public function collect() {
+			
 		}
 		
 	}

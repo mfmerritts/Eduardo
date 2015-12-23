@@ -19,37 +19,26 @@ package entities.environment
 		
 		/**
 		 * 
-		 * @param	_level - the current level, this is necessary becuase this calls functions my game world that do not exist in the base flashpunk world.
-		 * @param	_x - the x position to place the doorway.
-		 * @param	_y - the y position to place the doorway.
-		 * @param	_targetX - the x position where the player character will start in the level this door leads to.
-		 * @param	_targetY - the y position where the player character will start in the level this door leads to.
-		 * @param	_index - used to determine the level that this door leads to.
+		 * @param	level	- The level this door is in.
+		 * @param	stage	- The level this door leads to.
+		 * @param	x		- x coordinate
+		 * @param	y		- y coordinate
+		 * @param	targetX	- x where this leads
+		 * @param	targetY - y where this leads
 		 */
-		public function DoorWay(_level:ui.EddyWorld, _x:Number=0, _y:Number=0, _targetX:Number=0, _targetY:Number=0, _index:int=0) 
-		{
-			x = _x;
-			y = _y;
-			targetX = _targetX;
-			targetY = _targetY;
-			this.level = _level;
+		public function DoorWay(level:ui.EddyWorld, stage:Class, x:Number=0, y:Number=0, targetX:Number=0, targetY:Number=0) {
+			this.x = x;
+			this.y = y;
+			targetX = targetX;
+			targetY = targetY;
+			this.level = level;
 			setHitbox(24, 24);
-			if (_index == 1)
-			{
-				targetLevel = Assets.PARKLEVEL;
-			}
-			else
-			{
-				targetLevel = Assets.TESTLEVEL;
-			}
+			targetLevel = stage;
 		}
 		
-		override public function update():void 
-		{
-			 if (collide("player", x, y))
-			 {
-				 if (Input.pressed(Key.UP))
-				 { 
+		override public function update():void {
+			 if (collide("player", x, y)) {
+				 if (Input.pressed(Key.UP)) { 
 					 
 					 level.gotoLevel(targetLevel, targetX, targetY);
 				 }

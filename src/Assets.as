@@ -10,16 +10,21 @@ package
 	public class Assets 
 	{
 		//sprites
+		[Embed(source = "../assets/gfx/bat_24x15x4.png")] public static const BAT:Class;
 		[Embed(source = "../assets/gfx/eddy_29x35x28.png")] public static const EDDY:Class;
 		[Embed(source = "../assets/gfx/lizard_24x9x4.png")] public static const LIZARD:Class;
 		[Embed(source = "../assets/gfx/shooter_plant_40x40x16.png")] public static const SHOOTER_PLANT:Class;
 		
 		//tiles
 		[Embed(source = "../assets/gfx/base_tiles_24x24.png")] public static const BASETILE:Class;
+		[Embed(source = "../assets/gfx/decorative_tiles_24x24.png")] public static const DECORATION:Class;
 		
 		//levels
-		[Embed(source = "../assets/levels/testLevel.oel", mimeType = "application/octet-stream")] public static const TESTLEVEL:Class; //index 0
-		[Embed(source = "../assets/levels/parkLevel.oel", mimeType = "application/octet-stream")] public static const PARKLEVEL:Class; //index 1
+		[Embed(source = "../assets/levels/cave.oel", mimeType = "application/octet-stream")] public static const CAVE:Class;
+		
+		//Static level properties
+		public static var width:int = 320;
+		public static var height:int = 240;
 		
 		
 	}
