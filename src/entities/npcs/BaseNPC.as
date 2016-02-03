@@ -1,7 +1,9 @@
 package entities.npcs 
 {
+	import entities.Collidable;
 	import net.flashpunk.Entity;
 	import net.flashpunk.Graphic;
+	import net.flashpunk.graphics.Spritemap;
 	import net.flashpunk.Mask;
 	import net.flashpunk.FP;
 	
@@ -11,11 +13,11 @@ package entities.npcs
 	 * ...
 	 * @author  Chance Gallegos
 	 */
-	public class BaseNPC extends Entity 
+	public class BaseNPC extends Entity implements Collidable
 	{
 		
 		protected var faceRight:Boolean = true; //indicates whether the object is facing right or left.
-		protected var GRAVITY:Number = 0.2; //is treated like a constant, but some subclasses may have different values so it's variable, if this is not inline with best programming practices feel free to modify.
+		protected var GRAVITY:Number = 0.25;
 		protected var friction:Number = 0.02; //act's as the horizontal drag force.
 		private var ySpeed:Number = 0;
 		private var xSpeed:Number = 0;
@@ -24,6 +26,10 @@ package entities.npcs
 		protected var drag:Number = 0.02; //act's as the vertical drag force.
 		protected var maxSpeed:Number = 4;
 		protected var onGround:Boolean = false;
+		protected var mySprite:Spritemap;
+		protected var alive:Boolean = true;
+		protected var health:int = 1;
+		protected var invFrames:int = 0;
 		
 		public function BaseNPC(x:Number=0, y:Number=0, graphic:Graphic=null, mask:Mask=null) {
 			super(x, y, graphic, mask);
@@ -35,31 +41,36 @@ package entities.npcs
 		}
 		
 		/**
-		 * Called in order to move the entity.
+		 * Handles basic physics associated with moving.
 		 */
-		public function objectMove():void {
-			if (!collideTypes(["wall", "platform"], x, y + 1)) {
-				setYSpeed(ySpeed + GRAVITY);
-				onGround = false;
-				friction = 0.02;
-			}
-			
-			if (collideTypes(["wall", "platform"], x, y + 1)) {
-				setYSpeed(0);
-				onGround = true;
-				friction = 0.2;
-			}
-			
-			if (collideTypes("wall", x, y - 1))
-			{
-				if (ySpeed < 0)
-					{setYSpeed(0);}
-			}
+		protected function objectMove():void {
+			falling();
 			
 			moveBy(xSpeed, ySpeed, "wall");
 			
 			setYSpeed(ySpeed - ySpeed * drag);
 			setXSpeed(xSpeed - xSpeed * friction);
+		}
+		
+		/**
+		 * Handles falling only.
+		 */
+		protected function falling():void {
+			if (!collideTypes(["wall", "platform"], x, y + 1)) {
+				setYSpeed(ySpeed + GRAVITY);
+				onGround = false;
+				friction = 0.02;
+			}
+			else {
+				setYSpeed(0);
+				onGround = true;
+				friction = 0.2;
+			}
+			
+			if (collideTypes("wall", x, y - 1)) {
+				if (ySpeed < 0)
+					{setYSpeed(0);}
+			}
 		}
 		
 		//these functions are used to update interlinked properties whenever any individual property is modified.
@@ -133,6 +144,29 @@ package entities.npcs
 		public function getSpeed():Number {
 			return speed;
 		}
+		
+		/**
+		* Override this for easy manipulation of an entity post collision.
+		* @param	v1	first optional parameter
+		* @param	v2	second optional parameter
+		* @param	v3	third optional parameter
+		*/
+		public function onCollision(v1:Number = 0, v2:Number = 0, v3:Number = 0):void {
+			health--;
+			if (health <= 0) {
+				alive = false;
+				collidable = false;
+				mySprite.scaledHeight = -height;
+				type = "none";
+			}
+		}
+		
+		override public function removed():void {
+			super.removed();
+			graphic = null;
+			mask = null;
+		}
+		
 	}
 
 }

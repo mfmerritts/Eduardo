@@ -5,6 +5,7 @@ package entities.environment
 	import net.flashpunk.utils.Key;
 	import net.flashpunk.FP;
 	import ui.EddyWorld;
+	import ui.LoaderWorld;
 	
 	/**
 	 * ...
@@ -12,10 +13,9 @@ package entities.environment
 	 */
 	public class DoorWay extends Entity 
 	{
-		private var targetX:Number;
-		private var targetY:Number;
-		private var targetLevel:Class;
-		private var level:ui.EddyWorld;
+		protected var targetX:Number;
+		protected var targetY:Number;
+		protected var targetLevel:Class;
 		
 		/**
 		 * 
@@ -26,23 +26,40 @@ package entities.environment
 		 * @param	targetX	- x where this leads
 		 * @param	targetY - y where this leads
 		 */
-		public function DoorWay(level:ui.EddyWorld, stage:Class, x:Number=0, y:Number=0, targetX:Number=0, targetY:Number=0) {
+		public function DoorWay(stage:int, x:Number=0, y:Number=0, targetX:int =0, targetY:int = 0) {
 			this.x = x;
 			this.y = y;
-			targetX = targetX;
-			targetY = targetY;
-			this.level = level;
+			this.targetX = targetX;
+			this.targetY = targetY;
+			if (stage == 0) {
+				targetLevel = Assets.CAVE;
+			}
+			else if (stage == 1) {
+				targetLevel = Assets.CAVE_2;
+			}
+			else if (stage == 2) {
+				targetLevel = Assets.PRETTY_PLAINS_1;
+			}
+			else if (stage == 3) {
+				targetLevel = Assets.PRETTY_PLAINS_2;
+			}
+			else if (stage == 4) {
+				targetLevel = Assets.CITY_BRIDGE;
+			}
+			else if (stage == 5) {
+				targetLevel = Assets.BRIDGE_WAREHOUSE;
+			}
 			setHitbox(24, 24);
-			targetLevel = stage;
+			
 		}
 		
 		override public function update():void {
-			 if (collide("player", x, y)) {
-				 if (Input.pressed(Key.UP)) { 
+			if (collide("player", x, y)) {
+				if (Input.pressed(Key.X)) { 
 					 
-					 level.gotoLevel(targetLevel, targetX, targetY);
-				 }
-			 }
+					FP.world = new LoaderWorld(targetLevel, targetX, targetY);
+				}
+			}
 		}
 	}
 	

@@ -2,7 +2,7 @@ package ui
 {
 	import net.flashpunk.World;
 	import net.flashpunk.FP; 
-	import ui.EddyWorld;
+	import flash.system.System;
 	
 	/**
 	 * This world is used to transition levels. Currently, it doesn't really do anything and is not actually needed,
@@ -16,14 +16,12 @@ package ui
 		
 		private var level:World;
 		
-		public function LoaderWorld(mapData:Class, x:Number, y:Number) 
-		{
-			level = new ui.EddyWorld(mapData, x, y);
-			
+		public function LoaderWorld(mapData:Class, x:Number, y:Number) {
+			level = new EddyWorld(mapData, x, y);
+			System.gc();
 		}
 		
-		override public function begin():void
-		{
+		override public function begin():void {
 			
 			FP.world = level;
 			
