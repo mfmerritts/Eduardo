@@ -31,6 +31,9 @@ package entities.npcs
 			health = 2;
 		}
 		
+		/**
+		 * Called When the animation finishes and causes the robot to jump.
+		 */
 		private function jump():void {
 			jumping = true;
 			setYSpeed( -4);

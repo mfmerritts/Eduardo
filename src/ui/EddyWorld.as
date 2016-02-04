@@ -164,7 +164,7 @@ package ui
 				add(new DoorWay(int(node.@stage), int(node.@x), int(node.@y), int(node.@targetX), int(node.@targetY)));
 			}
 			for each (node in mapXML.entities.walkway) {
-				add(new WalkWay(int(node.@stage), int(node.@x), int(node.@y), int(node.@targetX), int(node.@targetY)));
+				add(new WalkWay(int(node.@stage), int(node.@x), int(node.@y), int(node.@targetX), int(node.@targetY), int(node.@width), int(node.@height)));
 			}
 			for each (node in mapXML.entities.platform) {
 				add(new Platform(int(node.@x), int(node.@y), int(node.@width)));
