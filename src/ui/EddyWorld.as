@@ -20,6 +20,7 @@ package ui
 		public static var width:int = 320;
 		public static var height:int = 240;
 		
+		
 		private var player:PlayerEntity;
 		private var map:Entity;
 		private var decoration:Entity;
@@ -160,6 +161,9 @@ package ui
 			for each (node in mapXML.entities.thornplant) {
 				add(new ThornPlant(int(node.@x), int(node.@y)));
 			}
+			for each (node in mapXML.entities.sandstone) {
+				add(new CrumblingBlock(int(node.@x), int(node.@y)));
+			}
 			for each (node in mapXML.entities.doorway) {
 				add(new DoorWay(int(node.@stage), int(node.@x), int(node.@y), int(node.@targetX), int(node.@targetY)));
 			}
@@ -178,11 +182,34 @@ package ui
 			for each (node in mapXML.entities.jumprobot) {
 				add(new JumpRobot(int(node.@x), int(node.@y), int(node.@drops)));
 			}
+			for each (node in mapXML.entities.clockbot) {
+				add(new ClockBot(int(node.@x), int(node.@y), int(node.@drops)));
+			}
+			for each (node in mapXML.entities.slime) {
+				add(new Slime(int(node.@x), int(node.@y)));
+			}
 			for each (node in mapXML.entities.lizard) {
 				add(new Lizard(int(node.@x), int(node.@y)));
 			}
 			for each (node in mapXML.entities.hazards) {
-				add(new Hazard(int(node.@x), int(node.@y), String(node.@side)));
+				add(new Spikes(int(node.@x), int(node.@y), String(node.@side)));
+			}
+			for each (node in mapXML.entities.rockwall) {
+				add(new Demolishable("rocks", int(node.@x), int(node.@y)));
+			}
+			for each (node in mapXML.entities.coppercoin) {
+				add(new Coin(int(node.@x), int(node.@y)));
+			}
+			for each (node in mapXML.entities.silvercoin) {
+				add(new Coin(int(node.@x), int(node.@y), "silver"));
+			}
+			for each (node in mapXML.entities.goldcoin) {
+				var coinIndex:int = int(node.@index);
+				for (var j:int = 0; j < 5; j++) {
+					if (coinIndex == j && PlayerData.coinCollected[coinIndex] == false) {
+						add(new Coin(int(node.@x), int(node.@y), "gold", coinIndex));
+					}
+				}
 			}
 			
 		}

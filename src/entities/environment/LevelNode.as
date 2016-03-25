@@ -89,7 +89,7 @@ package entities.environment
 		public function enterLevel():void {
 			if (levelName == "Mystic Cave") {
 				FP.world = new LoaderWorld(Assets.CAVE, 32, 220);
-				FP.screen.color = 0x060611;
+				FP.screen.color = 0x060615;
 			}
 			else if (levelName == "Pretty Plains") {
 				FP.world = new LoaderWorld(Assets.PRETTY_PLAINS_1, 32, 152);
@@ -101,6 +101,26 @@ package entities.environment
 			}
 			else if (levelName == "Butter Beach") {
 				FP.world = new LoaderWorld(Assets.BUTTER_BEACH, 32, 480);
+				FP.screen.color = 0x87CEFA;
+			}
+			else if (levelName == "Bitter Beach") {
+				FP.world = new LoaderWorld(Assets.BITTER_BEACH_1, 32, 224);
+				FP.screen.color = 0x87CEFA;
+			}
+			else if (levelName == "Outskirts") {
+				FP.world = new LoaderWorld(Assets.CITY_OUTSKIRTS, 32, 510);
+				FP.screen.color = 0x87CEFA;
+			}
+			else if (levelName == "Whimsy Woodlands") {
+				FP.world = new LoaderWorld(Assets.WHIMSY_WOODLANDS, 32, 510);
+				FP.screen.color = 0x87CEFA;
+			}
+			else if (levelName == "Sugar Meadows") {
+				FP.world = new LoaderWorld(Assets.SUGAR_MEADOWS, 32, 240);
+				FP.screen.color = 0x87CEFA;
+			}
+			else if (levelName == "Cursed Mountain") {
+				FP.world = new LoaderWorld(Assets.CURSED_MOUNTAIN, 32, 3000);
 				FP.screen.color = 0x87CEFA;
 			}
 		}

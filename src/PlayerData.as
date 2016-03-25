@@ -19,6 +19,9 @@ package
 		//levels that have been cleared.
 		public static var mysticCave:Boolean;
 		
+		//gold coins
+		public static var coinCollected:Array;
+		
 	}
 
 }

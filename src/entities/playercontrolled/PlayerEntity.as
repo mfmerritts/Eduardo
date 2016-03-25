@@ -40,6 +40,7 @@ package entities.playercontrolled
 		private var isCrawling:Boolean = false;
 		public var hasGrappleHook:Boolean = true;
 		
+		
 		public function PlayerEntity(initX:Number=0, initY:Number = 0) {
 			this.x = initX;
 			this.y = initY;
@@ -70,7 +71,6 @@ package entities.playercontrolled
 			type = "player";
 			name = "eddy"
 			setHitbox(22, 35, -3, 0);
-			
 			
 		}
 		
@@ -119,7 +119,62 @@ package entities.playercontrolled
 		 */
 		private function movement():void {
 			
-			if (!collideTypes("wall", x, y + 1)) { // checks to see if the player is falling.
+			wallsAndPlatforms();
+			
+			controls();
+			
+			ySpeed -= ySpeed * drag - ySpeed * ySpeed * ySpeed * 0.00015;
+			xSpeed -= xSpeed * friction;
+			
+			
+			if (ySpeed < 0) {
+				moveBy(0, ySpeed, "wall");
+			}
+			else {
+				setHitbox(22, 5, -3, -30);
+				if (!collide("platform", x, y)) {
+					moveBy(0, ySpeed, ["wall", "platform"], true);
+				}
+				else {
+					moveBy(0, ySpeed, ["wall"], true);
+				}
+				if (!isCrawling) {
+					setHitbox(22, 35, -3, 0);
+				}
+				else {
+					setHitbox(22, 20, -3, -15);
+				}
+			}
+			
+			moveBy(xSpeed, 0, "wall");
+			
+		}
+		
+		private function wallsAndPlatforms():void {
+			setHitbox(22, 5, -3, -30);
+			
+			onGround = false;
+			
+			if (ySpeed >= 0) {// checks to see of the player is standing.
+				
+				if (collideTypes("wall" , x, y + 1)) {// checks to see of the player is standing.
+					ySpeed = 0;
+					onGround = true;
+					friction = 0.25;
+					specialJump = 1;
+				}
+				
+				if (collide("platform" , x, y + 1) && !collide("platform", x, y - 1)) {
+					ySpeed = 0;
+					onGround = true;
+					friction = 0.25;
+					specialJump = 1;
+					
+				}
+				
+			}
+			
+			if (!onGround) { // checks to see if the player is falling.
 				ySpeed += GRAVITY;
 				onGround = false;
 				friction = 0.03;
@@ -129,7 +184,7 @@ package entities.playercontrolled
 						spriteEddy.play("JumpR");
 					}
 					else {
-							spriteEddy.play("JumpL");
+						spriteEddy.play("JumpL");
 					}
 				}
 				else {
@@ -141,13 +196,12 @@ package entities.playercontrolled
 					}
 				}
 			}
-			else if (collideTypes("wall", x, y + 1)) {// checks to see of the player is standing.
-				if (ySpeed >= 0) {
-					ySpeed = 0;
-					onGround = true;
-					friction = 0.25;
-					specialJump = 1;
-				}
+			
+			if (!isCrawling) {
+				setHitbox(22, 35, -3, 0);
+			}
+			else {
+				setHitbox(22, 20, -3, -15);
 			}
 			
 			if (collideTypes("wall", x, y - 1)) {// checks to see if the player hit a wall while jumping.
@@ -159,13 +213,6 @@ package entities.playercontrolled
 			if (collideTypes("wall", x + xSpeed / Math.abs(xSpeed), y )) { // checks to see if the player hit a wall while running.
 				xSpeed = 0;
 			}
-			
-			controls();
-			
-			ySpeed -= ySpeed * drag;
-			xSpeed -= xSpeed * friction;
-			moveBy(xSpeed, ySpeed, "wall");
-			
 		}
 		
 		/**
@@ -180,17 +227,17 @@ package entities.playercontrolled
 				FP.world.removeAll();
 				FP.world = new WorldMap();
 			}
-			else if (x < -24) {
+			else if (x < -24 || x > EddyWorld.width + 24) {
 				FP.world.removeAll();
 				FP.world = new WorldMap();
 			}
 			
-			if (!collideTypes(["basic enemy", "plant enemy", "hazard", "item", "mech enemy"], x, y)) {
+			if (!collideTypes(["basic enemy", "plant enemy", "hazard", "item", "mech enemy", "bullet"], x, y)) {
 				return;
 			}
 			
-			var other:Entity = collideTypes(["basic enemy", "plant enemy", "hazard", "item", "mech enemy"], x, y);
-			if (other.type == "hazard" || other.type == "plant enemy") {
+			var other:Entity = collideTypes(["basic enemy", "plant enemy", "hazard", "item", "mech enemy", "bullet"], x, y);
+			if (other.type == "hazard" || other.type == "plant enemy" || other.type == "bullet") {
 				PlayerData.powerHits--;
 				if (PlayerData.powerHits <= 0) {
 					PlayerData.power = 0;
@@ -320,19 +367,36 @@ package entities.playercontrolled
 							maxSpeed = 3.5;
 							setHitbox(22, 35, -3, 0);
 						}
-					}
-					if (faceRight) {
-						spriteEddy.play("StandR");
+						else {
+							if (faceRight) {
+								spriteEddy.play("CrouchR");
+							}
+							else {
+								spriteEddy.play("CrouchL");
+							}
+						}
 					}
 					else {
-						spriteEddy.play("StandL");
+						if (faceRight) {
+						spriteEddy.play("StandR");
+						}
+						else {
+							spriteEddy.play("StandL");
+						}
 					}
 				}
 			}
 			
 			if (Input.pressed(Key.X) && cooldown <= 0) {
-				if (PlayerData.power == 12) {
-					if (!isCrawling) {
+				if (PlayerData.power == 3) {
+					if (specialJump == 1) {
+						specialJump = 0;
+						specialJumpPow = 16;
+						ySpeed = -3;
+					}
+				}
+				else if (!isCrawling) {
+					if (PlayerData.power == 12) {
 						attacking = true;
 						cooldown = 30;
 						if (faceRight) {
@@ -348,9 +412,7 @@ package entities.playercontrolled
 							FP.world.add(new PlayerFireball(x, y + 8, -3 + xSpeed));
 						}
 					}
-				}
-				else if (PlayerData.power == 8) {
-					if (!isCrawling) {
+					else if (PlayerData.power == 8) {
 						var swing:String;
 						attacking = true;
 						cooldown = 45;
@@ -379,12 +441,21 @@ package entities.playercontrolled
 							FP.world.add(new Hammer(x, y, this, swing));
 						}
 					}
-				}
-				else if (PlayerData.power == 3) {
-					if (specialJump == 1) {
-						specialJump = 0;
-						specialJumpPow = 16;
-						ySpeed = -3;
+					if (PlayerData.power == 7) {
+						attacking = true;
+						cooldown = 30;
+						if (faceRight) {
+							if (xSpeed < 0.3 && ySpeed == 0) {
+								spriteEddy.play("AttackR");
+							}
+							FP.world.add(new PlayerPowderBall(x + 26, y + 8, 3 + xSpeed));
+						}
+						else {
+							if (xSpeed > -0.3 && ySpeed == 0) {
+								spriteEddy.play("AttackL");
+							}
+							FP.world.add(new PlayerPowderBall(x, y + 8, -3 + xSpeed));
+						}
 					}
 				}
 				

@@ -66,6 +66,10 @@ package ui
 				add(block);
 			}
 			
+			for (var i:int = 0; i < 5; i++) {
+				PlayerData.coinCollected[i] = false;
+			}
+			
 			player = new PlayerMap(PlayerData.mapX, PlayerData.mapY);
 			add(player);
 		}

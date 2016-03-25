@@ -1,5 +1,6 @@
 package entities.playercontrolled 
 {
+	import entities.environment.Hazard;
 	import entities.npcs.BaseNPC;
 	import net.flashpunk.FP;
 	import net.flashpunk.graphics.Spritemap;
@@ -39,6 +40,8 @@ package entities.playercontrolled
 				}
 			}
 			
+			var other:BaseNPC;
+			
 			if (collideTypes(["basic enemy", "plant enemy"], x, y)) {
 				if (!flare) {
 					flare = true;
@@ -49,8 +52,25 @@ package entities.playercontrolled
 					setHitbox(16, 20);
 					y -= 8;
 				}
-				var other:BaseNPC = BaseNPC(collideTypes(["basic enemy", "plant enemy"], x, y));
+				other = BaseNPC(collideTypes(["basic enemy", "plant enemy"], x, y));
 				other.onCollision(1, 1);
+			}
+			
+			var hazard:Hazard;
+			if (collide("hazard", x, y)) {
+				hazard = Hazard(collide("hazard", x, y));
+				if (!flare) {
+					flare = true;
+					mySprite = new Spritemap(Assets.FIRE, 16, 20, destroy);
+					graphic = mySprite;
+					mySprite.add("flare", [0, 1, 2, 3, 4], 20, false);
+					mySprite.play("flare");
+					setHitbox(16, 20);
+					y -= 8;
+				}
+				if (hazard.name == "plant hazard") {
+					hazard.onCollision(1, 1);
+				}
 			}
 			
 			objectMove();
