@@ -11,16 +11,10 @@ package entities.environment
 	 */
 	public class Hazard extends Entity implements Collidable {
 		
-		public function Hazard(x:Number=0, y:Number=0, side:String = "bottom") {
+		public function Hazard(x:Number=0, y:Number=0) {
 			super(x, y);
-			type = "hazard";
-			if (side == "bottom") {
-				setHitbox(22, 15, -1);
-				this.y += 9;
-			}
-			if (side == "top") {
-				setHitbox(22, 15, -1);
-			}
+			
+			
 			
 		}
 		

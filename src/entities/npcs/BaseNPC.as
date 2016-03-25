@@ -46,7 +46,14 @@ package entities.npcs
 		protected function objectMove():void {
 			falling();
 			
-			moveBy(xSpeed, ySpeed, "wall");
+			if (ySpeed > 0 && !collide("platform", x, y)) {
+				moveBy(0, ySpeed, ["wall", "platform"], true);
+			}
+			else {
+				moveBy(0, ySpeed, "wall");
+			}
+			
+			moveBy(xSpeed, 0, "wall");
 			
 			setYSpeed(ySpeed - ySpeed * drag);
 			setXSpeed(xSpeed - xSpeed * friction);
@@ -56,15 +63,16 @@ package entities.npcs
 		 * Handles falling only.
 		 */
 		protected function falling():void {
-			if (!collideTypes(["wall", "platform"], x, y + 1)) {
-				setYSpeed(ySpeed + GRAVITY);
-				onGround = false;
-				friction = 0.02;
-			}
-			else {
+			
+			if (collideTypes(["wall", "platform"], x, y + 1) && getYSpeed() > 0){
 				setYSpeed(0);
 				onGround = true;
 				friction = 0.2;
+			}
+			else {
+				setYSpeed(ySpeed + GRAVITY);
+				onGround = false;
+				friction = 0.02;
 			}
 			
 			if (collideTypes("wall", x, y - 1)) {
@@ -111,8 +119,8 @@ package entities.npcs
 		}
 		
 		/**
-		 * 
-		 * @param	sp	- the speed of the NPC
+		 * Sets the speed of the entity.
+		 * @param	sp	- the speed of the NPC in radians
 		 */
 		public function setSpeed(sp:Number = 0):void {
 			speed = sp;

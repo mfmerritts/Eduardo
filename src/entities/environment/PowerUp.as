@@ -24,6 +24,9 @@ package entities.environment
 			else if (power == 3) {
 				graphic = new Image(Assets.DOUBLE_JUMP);
 			}
+			else if (power == 7) {
+				graphic = new Image(Assets.POWDER_CAN);
+			}
 			else if (power == 8) {
 				graphic = new Image(Assets.HAMMER);
 			}

@@ -42,6 +42,8 @@ package ui
 			PlayerData.mapX = Data.readInt("mapX", 68);
 			PlayerData.mapY = Data.readInt("mapY", 244);
 			
+			PlayerData.coinCollected = new Array(false, false, false, false, false);
+			
 		}
 		
 		override public function update():void {

@@ -16,6 +16,7 @@ package entities.environment
 		protected var targetX:Number;
 		protected var targetY:Number;
 		protected var targetLevel:Class;
+		protected var stage:int;
 		
 		/**
 		 * 
@@ -26,11 +27,12 @@ package entities.environment
 		 * @param	targetX	- x where this leads
 		 * @param	targetY - y where this leads
 		 */
-		public function DoorWay(stage:int, x:Number=0, y:Number=0, targetX:int =0, targetY:int = 0) {
+		public function DoorWay(_stage:int, x:Number=0, y:Number=0, targetX:int =0, targetY:int = 0) {
 			this.x = x;
 			this.y = y;
 			this.targetX = targetX;
 			this.targetY = targetY;
+			stage = _stage;
 			if (stage == 0) {
 				targetLevel = Assets.CAVE;
 			}
@@ -49,6 +51,30 @@ package entities.environment
 			else if (stage == 5) {
 				targetLevel = Assets.BRIDGE_WAREHOUSE;
 			}
+			else if (stage == 6) {
+				targetLevel = Assets.BUTTER_BEACH;
+			}
+			else if (stage == 7) {
+				targetLevel = Assets.BUTTER_BEACH_2;
+			}
+			else if (stage == 8) {
+				targetLevel = Assets.CITY_OUTSKIRTS;
+			}
+			else if (stage == 9) {
+				targetLevel = Assets.OUTSKIRTS_WAREHOUSE;
+			}
+			else if (stage == 10) {
+				targetLevel = Assets.SUGAR_MEADOWS;
+			}
+			else if (stage == 11) {
+				targetLevel = Assets.ABOVE_STONEHENGE;
+			}
+			else if (stage == 12) {
+				targetLevel = Assets.CURSED_MOUNTAIN;
+			}
+			else if (stage == 13) {
+				targetLevel = Assets.CURSED_CAVE;
+			}
 			setHitbox(24, 24);
 			
 		}
@@ -56,7 +82,13 @@ package entities.environment
 		override public function update():void {
 			if (collide("player", x, y)) {
 				if (Input.pressed(Key.X)) { 
-					 
+					
+					if (stage == 12) {
+						FP.screen.color = 0x87CEFA;
+					}
+					if (stage == 13) {
+						FP.screen.color = 0x060615;
+					}
 					FP.world = new LoaderWorld(targetLevel, targetX, targetY);
 				}
 			}

@@ -75,7 +75,14 @@ package entities.npcs
 				}
 			}
 			
-			moveBy(getXSpeed(), getYSpeed(), "wall");
+			if (getYSpeed() > 0 && !collide("platform", x, y)) {
+				moveBy(0, getYSpeed(), ["wall", "platform"], true);
+			}
+			else {
+				moveBy(0, getYSpeed(), "wall");
+			}
+			
+			moveBy(getXSpeed(), 0, "wall");
 		}
 		
 	}

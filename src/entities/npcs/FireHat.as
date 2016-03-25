@@ -70,7 +70,7 @@ package entities.npcs
 			if (Math.abs(x - player.x) > 240 || Math.abs(y - player.y) > 180) {
 				return;
 			}
-			else if (Math.abs(x - player.x) < 90) {
+			else if (Math.abs(x - player.x) < 115) {
 				stroll = false;
 			}
 			else {
@@ -116,12 +116,18 @@ package entities.npcs
 							if (x - player.x < 70) {
 								setXSpeed(1);
 							}
+							else {
+								setXSpeed(0);
+							}
 						}
 						else {
 							faceRight = false;
 							mySprite.play("right");
 							if (player.x - x < 70) {
 								setXSpeed( -1);
+							}
+							else {
+								setXSpeed(0);
 							}
 						}
 					}

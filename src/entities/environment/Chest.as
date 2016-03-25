@@ -21,7 +21,7 @@ package entities.environment
 			this.x = x;
 			this.y = y;
 			width = 22;
-			setHitbox(width, 18, -1, -1);
+			setHitbox(width, 8, -1, -1);
 			mySprite = new Spritemap(Assets.RED_CHEST, 24, 24);
 			mySprite.frame = opened;
 			graphic = mySprite;

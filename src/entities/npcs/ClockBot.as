@@ -6,6 +6,7 @@ package entities.npcs
 	import net.flashpunk.Graphic;
 	import net.flashpunk.graphics.Spritemap;
 	import net.flashpunk.Mask;
+	import ui.EddyWorld;
 	
 	/**
 	 * ...
@@ -19,19 +20,33 @@ package entities.npcs
 		
 		public function ClockBot(x:Number=0, y:Number=0, drops:int=0) {
 			super(x, y);
-			mySprite = new Spritemap(Assets.CLOCK_BOT, 37, 33);
-			
+			mySprite = new Spritemap(Assets.CLOCK_BOT, 37, 33, turnArround);
+			health = 2;
 			mySprite.add("walk left", [5, 6, 7], 15);
 			mySprite.add("walk right", [8, 9, 10], 15);
-			mySprite.add("turn left", [8, 4, 5], 15);
-			mySprite.add("turn right", [5, 4, 8], 15);
+			mySprite.add("turn left", [8, 4, 4, 5], 15);
+			mySprite.add("turn right", [5, 4, 4, 8], 15);
 			this.drops = drops;
 			this.graphic = mySprite;
 			mySprite.play("left");
 			setHitbox(33, 33, -2, 0);
-			
+			setXSpeed( -1.5);
 			type = "mech enemy";
 			
+		}
+		
+		private function turnArround():void {
+			if (turning) {
+				turning = false;
+				if (faceRight) {
+					mySprite.play("walk right");
+					setXSpeed(1.5);
+				}
+				else {
+					mySprite.play("walk left");
+					setXSpeed( -1.5);
+				}
+			}
 		}
 		
 		override public function update():void {
@@ -51,24 +66,6 @@ package entities.npcs
 			
 			falling();
 			
-			if (turning) {
-				if (faceRight) {
-					if (12 == mySprite.frame) {
-						setXSpeed(2);
-						turning = false;
-						mySprite.play("walk right");
-					}
-				}
-				else {
-					if (8 == mySprite.frame) {
-						setXSpeed( -2);
-						turning = false;
-						mySprite.play("walk left");
-					}
-				}
-				return;
-			}
-			
 			if (!collideTypes(["wall", "platform"], x + 10 * getXSpeed(), y + 1) || collideTypes("wall", x + getXSpeed(), y)) {
 				setXSpeed(0);
 				if (faceRight && !turning) {
@@ -83,7 +80,14 @@ package entities.npcs
 				}
 			}
 			
-			moveBy(getXSpeed(), getYSpeed(), "wall");
+			if (getYSpeed() > 0 && !collide("platform", x, y)) {
+				moveBy(0, getYSpeed(), ["wall", "platform"], true);
+			}
+			else {
+				moveBy(0, getYSpeed(), "wall");
+			}
+			
+			moveBy(getXSpeed(), 0, "wall");
 		}
 		
 	}

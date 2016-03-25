@@ -14,7 +14,7 @@ package entities.npcs
 		
 		public function EnemyFireball(x:Number = 0, y:Number = 0, speed:Number = 0, direction:Number = 0) {
 			super(x, y);
-			type = "hazard";
+			type = "bullet";
 			setSpeed(speed);
 			setDirection(direction);
 			GRAVITY = 0.1;

@@ -20,7 +20,7 @@ package entities.npcs
 			setSpeed(speed);
 			setDirection(direction);
 			graphic = mySprite;
-			type = "hazard"; // type 'hazard' causes harm to the player.
+			type = "bullet"; // type 'hazard' causes harm to the player.
 			GRAVITY = 0;
 			drag = 0;
 			friction = 0;

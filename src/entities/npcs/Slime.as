@@ -1,54 +1,47 @@
 package entities.npcs 
 {
-	import entities.environment.PowerUp;
-	import net.flashpunk.Entity;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.graphics.Spritemap;
 	import net.flashpunk.Mask;
+	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	
 	/**
 	 * ...
 	 * @author Chance
 	 */
-	public class JumpRobot extends BaseNPC {
+	public class Slime extends BaseNPC {
 		
-		private var drops:int;
 		private var timer:int = 30;
 		private var player:Entity;
 		private var jumping:Boolean;
 		
-		public function JumpRobot(x:Number=0, y:Number=0, drops:int=0) {
+		public function Slime(x:Number=0, y:Number=0) {
 			super(x, y);
-			type = "mech enemy";
-			health = 2;
-			mySprite = new Spritemap(Assets.JUMPBOT, 20, 32, jump);
-			mySprite.add("jump", [0, 1, 2, 3, 4, 5, 6, 7], 15, false);
-			this.drops = drops;
+			mySprite = new Spritemap(Assets.SLIME, 32, 24, jump);
+			setHitbox(28, 24, -2, 0);
+			mySprite.add("jump", [0, 1, 0, 1, 0, 1, 0, 1, 0, 2], 10, false);
+			type = "slime";
 			graphic = mySprite;
-			setHitbox(20, 32);
 			mySprite.play("jump");
 		}
 		
-		/**
-		 * Called When the animation finishes and causes the robot to jump.
-		 */
 		private function jump():void {
 			jumping = true;
 			setYSpeed( -4);
 			y -= 2;
-			timer = 18;
+			timer = 2;
 			if (x > player.x) {
-				setXSpeed( -1.5);
+				setXSpeed( -3.2);
 				mySprite.scaleX = 1;
 				mySprite.originX = 0;
 			}
 			else {
-				setXSpeed(1.5);
+				setXSpeed(3.2);
 				mySprite.scaleX = -1;
 				mySprite.originX = 20;
 			}
-			mySprite.frame = 7;
+			mySprite.frame = 2;
 		}
 		
 		override public function update():void {
@@ -60,13 +53,14 @@ package entities.npcs
 				mySprite.frame = 5;
 				setYSpeed(getYSpeed() + GRAVITY);
 				moveBy(getXSpeed(), getYSpeed());
-				if (drops > 0) {
-					FP.world.add(new PowerUp(x, y + 4, drops));
-					drops = 0;
-				}
 				if (!onCamera) {
 					destroy();
 				}
+				return;
+			}
+			
+			if (type == "wall") {
+				objectMove();
 				return;
 			}
 			
@@ -86,13 +80,27 @@ package entities.npcs
 					setYSpeed( -4);
 				}
 				else {
-					timer = 15;
+					timer = 3;
 					jumping = false;
 				}
 			}
 			
-			
 			objectMove();
+		}
+		
+		override public function onCollision(v1:Number = 0, v2:Number = 0, v3:Number = 0):void {
+			health--;
+			if (int(v2) == 3) {
+				type = "wall";
+				mySprite.frame = 3;
+				setXSpeed(0);
+			}
+			else if (health <= 0) {
+				alive = false;
+				collidable = false;
+				mySprite.scaledHeight = -height;
+				type = "none";
+			}
 		}
 		
 	}

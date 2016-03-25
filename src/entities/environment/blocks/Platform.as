@@ -20,17 +20,19 @@ package entities.environment.blocks
 			this.x = x;
 			this.y = y;
 			setHitbox(width, 8);
-			type = "wall";
+			type = "platform";
 			
 		} // end constructor		
 		
 		override public function update():void {
+			/*
 			if (collide("player", x + 1, y + 1) || collide("player", x - 1, y + 1)) {
 				type = "platform"; 
 			}
 			else if (!collide("player", x, y)) {
 				type = "wall";
 			}
+			//*/
 			
 			super.update();
 			

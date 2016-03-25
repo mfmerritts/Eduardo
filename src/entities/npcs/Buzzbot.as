@@ -82,6 +82,7 @@ package entities.npcs
 					mySprite.play("left");
 				}
 			}
+			
 			if (preferredSpeed != getSpeed()) {
 					setSpeed(preferredSpeed);
 				}
@@ -96,6 +97,10 @@ package entities.npcs
 					side = -side;
 					objectMove();
 				}
+			}
+			else if (behavior == "Left") {
+				setDirection(Math.PI);
+				objectMove();
 			}
 			else if (behavior == "Shoot") {
 				if (player.x > x) {
@@ -124,7 +129,7 @@ package entities.npcs
 					}
 					shootTimer = 90;
 				}
-				objectMove();
+				moveBy(0, getYSpeed(), "wall");
 			}
 			else if (behavior == "Chase") {
 				if (player.x > x) {

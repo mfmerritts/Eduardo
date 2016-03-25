@@ -19,7 +19,6 @@ package entities.environment
 		public function Item(x:Number=0, y:Number=0) {
 			super(x, y);
 			type = "item";
-			GRAVITY = 0;
 		}
 		
 		/**
